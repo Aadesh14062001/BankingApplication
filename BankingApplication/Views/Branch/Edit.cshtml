@@ -1,0 +1,79 @@
+﻿@model BankingApplication.Models.BranchModel
+
+@{
+    ViewData["Title"] = "Edit Branch";
+}
+
+<style>
+    .form-label {
+        font-weight: 600;
+        color: #343a40;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px 24px;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+
+    .btn-secondary {
+        padding: 10px 24px;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+
+    .card-form {
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+</style>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-dark fw-bold text-center">Edit Branch Details</h2>
+
+    <form asp-action="Edit" method="post" class="card p-4 card-form">
+        <input type="hidden" asp-for="BranchID" />
+
+        <div class="mb-3">
+            <label asp-for="BranchName" class="form-label">Branch Name</label>
+            <input asp-for="BranchName" class="form-control" />
+            <span asp-validation-for="BranchName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="BranchCode" class="form-label">Branch Code</label>
+            <input asp-for="BranchCode" class="form-control" />
+            <span asp-validation-for="BranchCode" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="City" class="form-label">City</label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CorporateID" class="form-label">Corporate</label>
+            <select asp-for="CorporateID" class="form-control" asp-items="ViewBag.CorporateList"></select>
+            <span asp-validation-for="CorporateID" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

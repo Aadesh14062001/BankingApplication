@@ -1,0 +1,30 @@
+﻿@model BankingApplication.Models.CorporateModel
+@{
+    ViewData["Title"] = "Edit Corporate";
+}
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">Edit Corporate</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="CorporateID" />
+                <div class="mb-3">
+                    <label asp-for="CorporateName" class="form-label">Corporate Name</label>
+                    <input asp-for="CorporateName" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label">Location</label>
+                    <input asp-for="Location" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-save"></i> Update
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model BankingApplication.Models.BranchModel
+
+@{
+    ViewData["Title"] = "Add Branch";
+}
+
+<h2 class="mb-4">Add Branch</h2>
+
+<form asp-action="Create" method="post" class="p-4 shadow rounded bg-light">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Corporate Dropdown on Top -->
+    <div class="form-group mb-3">
+        <label asp-for="CorporateID" class="form-label">Corporate</label>
+        <select asp-for="CorporateID" class="form-control" asp-items="ViewBag.CorporateList">
+            <option value="">-- Select Corporate --</option>
+        </select>
+        <span asp-validation-for="CorporateID" class="text-danger"></span>
+    </div>
+
+    <!-- Branch Name -->
+    <div class="form-group mb-3">
+        <label asp-for="BranchName" class="form-label">Branch Name</label>
+        <input asp-for="BranchName" class="form-control" placeholder="Enter branch name" />
+        <span asp-validation-for="BranchName" class="text-danger"></span>
+    </div>
+
+    <!-- Branch Code -->
+    <div class="form-group mb-3">
+        <label asp-for="BranchCode" class="form-label">Branch Code</label>
+        <input asp-for="BranchCode" class="form-control" placeholder="Enter branch code" />
+        <span asp-validation-for="BranchCode" class="text-danger"></span>
+    </div>
+
+    <!-- City -->
+    <div class="form-group mb-3">
+        <label asp-for="City" class="form-label">City</label>
+        <input asp-for="City" class="form-control" placeholder="Enter city" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <!-- Hidden CorporateID field for debugging (remove later if not needed) -->
+    @* <input type="hidden" asp-for="CorporateID" /> *@
+
+    <!-- Buttons -->
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary px-4">Save</button>
+        <a asp-action="Index" class="btn btn-secondary px-4 ms-2">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

@@ -1,0 +1,87 @@
+﻿
+@model CustomerModel
+@{
+    ViewBag.Title = "Create Customer";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Create Customer</h4>
+        </div>
+        <div class="card-body bg-light">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success">@TempData["Message"]</div>
+            }
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="CorporateID" class="form-label">Corporate</label>
+                        @Html.DropDownListFor(model => model.CorporateID,
+                        (List<SelectListItem>)ViewBag.Corporates,
+                                                "-- Select Corporate --",
+                                                new { @class = "form-select" })
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button type="submit" name="loadBranches" value="true" class="btn btn-outline-info w-100">
+                            <i class="bi bi-arrow-repeat me-1"></i>Load Branches
+                        </button>
+                    </div>
+                </div>
+
+                @if (ViewBag.Branches != null)
+                {
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="BranchID" class="form-label">Branch</label>
+                            @Html.DropDownListFor(model => model.BranchID,
+                            (List<SelectListItem>)ViewBag.Branches,
+                                                "-- Select Branch --",
+                                                new { @class = "form-select" })
+                    </div>
+                    <div class="col-md-6">
+                        <label for="CustomerName" class="form-label">Customer Name</label>
+                        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Gender" class="form-label">Gender</label>
+                        @Html.DropDownListFor(model => model.Gender,
+                                                new List<SelectListItem>
+                                                {
+                                                new SelectListItem { Text = "-- Select Gender --", Value = "" },
+                                                new SelectListItem { Text = "Male", Value = "Male" },
+                                                new SelectListItem { Text = "Female", Value = "Female" },
+                                                new SelectListItem { Text = "Other", Value = "Other" }
+                                                },
+                                                new { @class = "form-select" })
+                    </div>
+                    <div class="col-md-6">
+                        <label for="PhoneNumber" class="form-label">Phone</label>
+                        @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-6">
+                        <label for="PANNumber" class="form-label">PAN</label>
+                        @Html.TextBoxFor(model => model.PANNumber, new { @class = "form-control text-uppercase" })
+                    </div>
+                    <div class="col-md-6">
+                        <label for="AadhaarNumber" class="form-label">Aadhaar</label>
+                        @Html.TextBoxFor(model => model.AadhaarNumber, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-3">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save-fill me-1"></i>Save</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+                                }
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+    .dashboard-container {
+        margin-top: 30px;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 0;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+        .dashboard-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+
+    .dashboard-card {
+        border-radius: 0;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        min-height: 180px;
+        padding-top: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border-left: 4px solid #2a5298;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+    .dashboard-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #1e3c72;
+    }
+
+    .btn-sm {
+        margin-top: 10px;
+        border-radius: 0;
+        font-weight: 600;
+        min-width: 80px;
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
+
+<div class="container dashboard-container">
+    <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Corporate -->
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card dashboard-card text-center">
+                <div class="card-body">
+                    <div class="dashboard-icon text-primary"><i class="bi bi-building"></i></div>
+                    <h5 class="card-title">Corporate</h5>
+                    <p class="text-muted small">Manage corporate entities</p>
+                    <a asp-controller="Corporate" asp-action="Index" class="btn btn-primary btn-sm">Open</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branch -->
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card dashboard-card text-center">
+                <div class="card-body">
+                    <div class="dashboard-icon text-success"><i class="bi bi-diagram-3"></i></div>
+                    <h5 class="card-title">Branch</h5>
+                    <p class="text-muted small">Manage branches</p>
+                    <a asp-controller="Branch" asp-action="Index" class="btn btn-success btn-sm">Open</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer -->
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card dashboard-card text-center">
+                <div class="card-body">
+                    <div class="dashboard-icon text-warning"><i class="bi bi-person-lines-fill"></i></div>
+                    <h5 class="card-title">Customer</h5>
+                    <p class="text-muted small">Manage customer profiles</p>
+                    <a asp-controller="Customer" asp-action="Index" class="btn btn-warning btn-sm text-white">Open</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account -->
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card dashboard-card text-center">
+                <div class="card-body">
+                    <div class="dashboard-icon text-info"><i class="bi bi-credit-card"></i></div>
+                    <h5 class="card-title">Account</h5>
+                    <p class="text-muted small">Manage bank accounts</p>
+                    <a asp-controller="Account" asp-action="Index" class="btn btn-info btn-sm text-white">Open</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <a asp-controller="Transaction" asp-action="Dashboard" class="card-link">
+                <div class="card dashboard-card text-center">
+                    <div class="card-body">
+                        <div class="dashboard-icon text-danger"><i class="bi bi-cash-stack"></i></div>
+                        <h5 class="card-title">Transactions</h5>
+                        <p class="text-muted small">Deposit, Withdraw, History, Balance</p>
+                        <span class="btn btn-outline-danger btn-sm mt-2">Open</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- KYC -->
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card dashboard-card text-center">
+                <div class="card-body">
+                    <div class="dashboard-icon text-secondary"><i class="bi bi-shield-check"></i></div>
+                    <h5 class="card-title">KYC</h5>
+                    <p class="text-muted small">Verify customer documents</p>
+                    <a asp-controller="Kyc" asp-action="Index" class="btn btn-secondary btn-sm">Open</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

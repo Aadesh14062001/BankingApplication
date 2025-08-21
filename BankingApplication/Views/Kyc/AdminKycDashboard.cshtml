@@ -1,0 +1,59 @@
+﻿@model IEnumerable<BankingApplication.Models.KycReviewViewModel>
+@{
+    ViewData["Title"] = "KYC Verification Dashboard";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">KYC Verification Dashboard</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info">@TempData["Message"]</div>
+    }
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>Customer Name</th>
+                <th>PAN</th>
+                <th>Aadhaar</th>
+                <th>Status</th>
+                <th>Verified On</th>
+                <th>Remarks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kyc in Model)
+            {
+                <tr>
+                    <td>@kyc.CustomerName</td>
+                    <td><a href="@kyc.PANCardPath" target="_blank">View PAN</a></td>
+                    <td><a href="@kyc.AadhaarCardPath" target="_blank">View Aadhaar</a></td>
+                    <td class="text-center">
+                        <span class="badge bg-@(kyc.KycStatus == "Verified" ? "success" : kyc.KycStatus == "Rejected" ? "danger" : "warning")">
+                            @kyc.KycStatus
+                        </span>
+                    </td>
+                    <td>@(kyc.VerifiedDate?.ToString("dd-MM-yyyy") ?? "-")</td>
+                    <td>@kyc.Remarks</td>
+                    <td>
+                        <form asp-action="UpdateKycStatus" method="post" class="mb-1">
+                            <input type="hidden" name="KycID" value="@kyc.KycID" />
+                            <input type="hidden" name="NewStatus" value="Verified" />
+                            <input type="text" name="Remarks" class="form-control mb-1" placeholder="Remarks (optional)" />
+                            <button type="submit" class="btn btn-success btn-sm w-100">Approve</button>
+                        </form>
+
+                        <form asp-action="UpdateKycStatus" method="post">
+                            <input type="hidden" name="KycID" value="@kyc.KycID" />
+                            <input type="hidden" name="NewStatus" value="Rejected" />
+                            <input type="text" name="Remarks" class="form-control mb-1" placeholder="Remarks (optional)" />
+                            <button type="submit" class="btn btn-danger btn-sm w-100">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

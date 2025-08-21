@@ -1,0 +1,117 @@
+﻿
+@model BankingApplication.Models.TransactionHistoryViewModel
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<!-- Optional: Add this to your shared CSS or layout -->
+<style>
+    .btn-deep-blue {
+        background-color: #1e3c72;
+        color: white;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+        .btn-deep-blue:hover {
+            background-color: #16325c;
+            box-shadow: 0 0 10px rgba(30, 60, 114, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .card-header h4 {
+        font-weight: 600;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .table th {
+        text-align: center;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .balance-card {
+        background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        border-left: 5px solid #1e3c72;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-sm rounded-0">
+        <!-- 🔵 Unified Gradient Header -->
+        <div class="card-header text-white" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+            <h4 class="mb-0">Transaction History</h4>
+            <p class="mb-0 small text-white-50">View all deposits and withdrawals for the selected account</p>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="TransactionHistory" method="post" class="mb-4">
+                <div class="mb-3">
+                    <label asp-for="AccountNumber" class="form-label">Account No</label>
+                    <input asp-for="AccountNumber" class="form-control" placeholder="Enter account number" />
+                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-deep-blue">
+                    <i class="bi bi-search"></i> View History
+                </button>
+            </form>
+
+            @if (Model.Items?.Count > 0)
+            {
+                <!-- 📋 Transaction Table -->
+                <table class="table table-bordered table-striped mt-2">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Txn ID</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var txn in Model.Items)
+                        {
+                            <tr>
+                                <td>@txn.TransactionId</td>
+                                <td class="text-center">
+                                    <span class="badge @(txn.TransactionType == "Credit" ? "bg-success" : "bg-danger")">
+                                        @txn.TransactionType
+                                    </span>
+                                </td>
+                                <td>₹@txn.Amount.ToString("0.00")</td>
+                                <td>@txn.CreatedDate.ToString("dd MMM yyyy hh:mm tt")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <!-- 💰 Current Balance Card -->
+                <div class="card balance-card rounded-0 mt-4 p-3">
+                    <p class="mb-0 fs-5 fw-semibold text-dark">
+                        <i class="bi bi-wallet2 me-2 text-primary"></i>
+                        Current Balance: ₹@Model.ClosingBalance.ToString("0.00")
+                    </p>
+                </div>
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.AccountNumber))
+            {
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    No transactions found for Account No: <strong>@Model.AccountNumber</strong>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+

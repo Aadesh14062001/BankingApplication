@@ -1,0 +1,60 @@
+﻿@model BankingApplication.Models.AccountViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<h2>Create Account</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="form-group">
+        <label>Corporate</label>
+        <select asp-for="Account.CorporateID" asp-items="Model.Corporates" class="form-control"
+                onchange="this.form.submit()">
+            <option value="">-- Select Corporate --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Branch</label>
+        <select asp-for="Account.BranchID" asp-items="Model.Branches" class="form-control"
+                onchange="this.form.submit()">
+            <option value="">-- Select Branch --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Customer</label>
+        <select asp-for="Account.CustomerID" asp-items="Model.Customers" class="form-control">
+            <option value="">-- Select Customer --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Account Type</label>
+        <select asp-for="Account.AccountType" asp-items="Model.AccountTypes" class="form-control">
+            <option value="">-- Select Account Type --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Currency</label>
+        <select asp-for="Account.Currency" asp-items="Model.Currencies" class="form-control">
+            <option value="">-- Select Currency --</option>
+        </select>
+    </div>
+
+    @* <div class="form-group">
+        <label>Account Number</label>
+        <input asp-for="Account.AccountNumber" class="form-control" readonly />
+    </div> *@
+
+    @* <div class="form-group">
+        <label>Opened On</label>
+        <input asp-for="Account.OpenedOn" type="datetime" class="form-control" readonly />
+    </div> *@
+
+    <button type="submit" class="btn btn-primary">Create</button>
+
+</form>

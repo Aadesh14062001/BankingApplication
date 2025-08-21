@@ -1,0 +1,230 @@
+﻿@* @model BankingApplication.Models.KycSubmissionViewModel
+@{
+    ViewData["Title"] = "Submit Your KYC Documents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .kyc-hero {
+        background: linear-gradient(135deg, #ff6a00, #ee0979);
+        color: white;
+        padding: 50px 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+        .kyc-hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .kyc-hero p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+    .kyc-form-card {
+        background: #fdfdfd;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 30px;
+    }
+
+        .kyc-form-card label {
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .kyc-form-card .form-control {
+            border-radius: 10px;
+            box-shadow: none;
+            transition: box-shadow 0.3s ease;
+        }
+
+            .kyc-form-card .form-control:focus {
+                box-shadow: 0 0 0 0.2rem rgba(255,106,0,0.25);
+            }
+
+    .btn-submit {
+        background: linear-gradient(to right, #ff6a00, #ee0979);
+        color: white;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 30px;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+        .btn-submit:hover {
+            background: #d94b00;
+            box-shadow: 0 0 10px rgba(255, 106, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .form-label i {
+        margin-right: 6px;
+        color: #ee0979;
+    }
+
+    .customer-preview {
+        background-color: #fff8f0;
+        border: 1px solid #ffd9b3;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+        .customer-preview p {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+</style>
+
+<div class="container mt-4">
+    <div class="kyc-hero">
+        <h2>Submit Your KYC Documents</h2>
+        <p>Upload your PAN and Aadhaar securely to complete verification.</p>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="kyc-form-card">
+        <!-- Customer Selection Form -->
+        <form asp-action="SubmitKYC" method="get">
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-person-fill"></i> Select Customer
+                </label>
+                <select name="customerId" class="form-select" onchange="if(this.value) this.form.submit();">
+                    @foreach (var item in (List<SelectListItem>)ViewBag.CustomerList)
+                    {
+                        var isSelected = item.Value == Model.CustomerID.ToString() ? "selected" : null;
+                        <option value="@item.Value" title="@item.Text" selected="@isSelected">
+                            @item.Text
+                        </option>
+                    }
+                </select>
+            </div>
+        </form>
+
+        <!-- Customer Details Preview -->
+        @if (ViewBag.SelectedCustomer != null)
+        {
+            var c = (BankingApplication.Models.CustomerViewModel)ViewBag.SelectedCustomer;
+            <div class="customer-preview">
+                <h6 class="text-secondary fw-bold mb-2">
+                    <i class="bi bi-person-lines-fill me-1"></i> Customer Details
+                </h6>
+                <p><strong>Name:</strong> @c.CustomerName</p>
+                <p><strong>Mobile:</strong> @c.MobileNumber</p>
+                <p><strong>Branch:</strong> @c.BranchName</p>
+                <p><strong>Account No:</strong> @c.AccountNumber</p>
+            </div>
+        }
+
+        <!-- KYC Submission Form -->
+        <form asp-action="SubmitKYC" method="post" enctype="multipart/form-data">
+            @Html.HiddenFor(m => m.CustomerID)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+            <div class="mb-4">
+                <label asp-for="PANCardFile" class="form-label">
+                    <i class="bi bi-card-heading"></i> Upload PAN Card
+                </label>
+                <input asp-for="PANCardFile" type="file" class="form-control border-warning" />
+                <span asp-validation-for="PANCardFile" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="AadhaarCardFile" class="form-label">
+                    <i class="bi bi-file-earmark-person"></i> Upload Aadhaar Card
+                </label>
+                <input asp-for="AadhaarCardFile" type="file" class="form-control border-danger" />
+                <span asp-validation-for="AadhaarCardFile" class="text-danger small"></span>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-submit">
+                    <i class="bi bi-upload me-1"></i> Submit KYC
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+
+
+@model BankingApplication.Models.KycSubmissionViewModel
+@{
+    ViewBag.Title = "Submit KYC";
+    var selectedCustomer = ViewBag.SelectedCustomer as BankingApplication.Models.CustomerViewModel;
+}
+
+<h2 class="mb-4">Submit KYC</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="SubmitKYC" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="CustomerID" class="form-label">Select Customer</label>
+        <select asp-for="CustomerID" class="form-select" onchange="this.form.submit();">
+            @foreach (var item in (List<SelectListItem>)ViewBag.CustomerList)
+            {
+                <option value="@item.Value" selected="@(item.Value == Model.CustomerID.ToString() ? "selected" : null)">
+                    @item.Text
+                </option>
+            }
+        </select>
+        <span asp-validation-for="CustomerID" class="text-danger"></span>
+    </div>
+
+    @if (selectedCustomer != null)
+    {
+        <div class="card mb-4">
+            <div class="card-header">Customer Preview</div>
+            <div class="card-body">
+                <p><strong>Name:</strong> @selectedCustomer.CustomerName</p>
+                <p><strong>Mobile:</strong> @selectedCustomer.MobileNumber</p>
+               
+            </div>
+        </div>
+    }
+
+    <div class="mb-3">
+        <label for="PANCardFile" class="form-label">Upload PAN Card</label>
+        <input asp-for="PANCardFile" type="file" class="form-control" />
+        <span asp-validation-for="PANCardFile" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="AadhaarCardFile" class="form-label">Upload Aadhaar Card</label>
+        <input asp-for="AadhaarCardFile" type="file" class="form-control" />
+        <span asp-validation-for="AadhaarCardFile" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit KYC</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,87 @@
+﻿
+
+
+
+
+@model BankingApplication.Models.DepositWithdrawViewModel
+@{
+    ViewData["Title"] = "Withdraw";
+}
+
+<!-- Optional: Add to shared layout or CSS -->
+<style>
+    .btn-deep-blue {
+        background-color: #1e3c72;
+        color: white;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+        .btn-deep-blue:hover {
+            background-color: #16325c;
+            box-shadow: 0 0 10px rgba(30, 60, 114, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .card-header h4 {
+        font-weight: 600;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .alert-info {
+        font-weight: 500;
+    }
+</style>
+
+<div class="container mt-4">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm rounded-0">
+        <!-- 🔵 Unified Gradient Header -->
+        <div class="card-header text-white" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+            <h4 class="mb-0">Withdraw Funds</h4>
+            <p class="mb-0 small text-white-50">Deduct money from customer accounts securely</p>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Withdraw" method="post">
+                <div class="mb-3">
+                    <label asp-for="AccountNumber" class="form-label">Account No</label>
+                    <input asp-for="AccountNumber" class="form-control" placeholder="Enter account number" />
+                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Amount" class="form-label">Amount</label>
+                    <input asp-for="Amount" class="form-control" placeholder="Enter withdrawal amount" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+
+                @if (Model.CurrentBalance > 0)
+                {
+                    <div class="alert alert-info">
+                        <i class="bi bi-wallet2 me-2 text-primary"></i>
+                        Current Balance: ₹@Model.CurrentBalance.ToString("0.00")
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-deep-blue">
+                    <i class="bi bi-arrow-up-circle me-1"></i> Submit Withdrawal
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,158 @@
+﻿
+
+
+
+@model BankingApplication.Models.TransactionViewModel
+@{
+    ViewData["Title"] = "Transaction Dashboard";
+}
+
+<style>
+    .card {
+        border-radius: 0;
+        box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+        padding: 25px;
+        background: linear-gradient(to bottom right, #fdfdfd, #f1f3f5);
+    }
+
+    .btn {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #1e3c72;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        background-color: #8e0e00;
+        color: #fff;
+    }
+
+    .btn-secondary:hover {
+        background-color: #495057;
+        color: #fff;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #212529;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        background-color: #1e3c72;
+        color: white;
+    }
+</style>
+
+<div class="container mt-4">
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @ViewBag.Success
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- 💰 DEPOSIT -->
+    <div class="card">
+        <div class="section-title">💰 Deposit Amount</div>
+        <form asp-action="Deposit" method="post">
+            <div class="mb-3">
+                <label asp-for="DepositWithdraw.AccountNumber" class="form-label">Account No</label>
+                <input asp-for="DepositWithdraw.AccountNumber" class="form-control" placeholder="Enter account number" />
+                <span asp-validation-for="DepositWithdraw.AccountNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DepositWithdraw.Amount" class="form-label">Amount</label>
+                <input asp-for="DepositWithdraw.Amount" class="form-control" placeholder="Enter deposit amount" />
+                <span asp-validation-for="DepositWithdraw.Amount" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-arrow-down-circle me-1"></i> Deposit
+            </button>
+        </form>
+    </div>
+
+    <!-- 💸 WITHDRAW -->
+    <div class="card">
+        <div class="section-title">💸 Withdraw Amount</div>
+        <form asp-action="Withdraw" method="post">
+            <div class="mb-3">
+                <label asp-for="DepositWithdraw.AccountNumber" class="form-label">Account No</label>
+                <input asp-for="DepositWithdraw.AccountNumber" class="form-control" placeholder="Enter account number" />
+                <span asp-validation-for="DepositWithdraw.AccountNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DepositWithdraw.Amount" class="form-label">Amount</label>
+                <input asp-for="DepositWithdraw.Amount" class="form-control" placeholder="Enter withdrawal amount" />
+                <span asp-validation-for="DepositWithdraw.Amount" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-danger">
+                <i class="bi bi-arrow-up-circle me-1"></i> Withdraw
+            </button>
+        </form>
+    </div>
+
+    <!-- 📜 TRANSACTION HISTORY -->
+    <div class="card">
+        <div class="section-title">📜 Transaction History</div>
+        <form asp-action="TransactionHistory" method="post">
+            <div class="mb-3">
+                <label asp-for="History.AccountNumber" class="form-label">Account No</label>
+                <input asp-for="History.AccountNumber" class="form-control" placeholder="Enter account number" />
+                <span asp-validation-for="History.AccountNumber" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-secondary">
+                <i class="bi bi-clock-history me-1"></i> View History
+            </button>
+        </form>
+
+        @if (Model.History?.Items?.Count > 0)
+        {
+            <table class="table table-bordered table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>Txn ID</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Balance After</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var txn in Model.History.Items)
+                    {
+                        <tr>
+                            <td>@txn.TransactionId</td>
+                            <td>@txn.TransactionType</td>
+                            <td>₹@txn.Amount.ToString("0.00")</td>
+                            <td>₹@txn.BalanceAfter.ToString("0.00")</td>
+                            <td>@txn.CreatedDate.ToString("dd MMM yyyy hh:mm tt")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

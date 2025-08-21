@@ -1,0 +1,183 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BankingApplication</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <style>
+        body {
+            padding-top: 56px;
+            background-color: #f1f3f5;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+        }
+
+            .nav-link:hover {
+                color: #e2e6ea !important;
+            }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(to bottom, #1f2a40, #2c3e50);
+            position: fixed;
+            top: 56px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+            .sidebar h6 {
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                font-weight: 600;
+                color: #adb5bd;
+                margin-bottom: 0.75rem;
+            }
+
+            .sidebar .nav-link {
+                color: #dee2e6;
+                padding: 10px 14px;
+                border-radius: 0;
+                margin-bottom: 6px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                transition: background 0.3s ease, color 0.3s ease;
+            }
+
+                .sidebar .nav-link i {
+                    font-size: 1rem;
+                }
+
+                .sidebar .nav-link:hover {
+                    background: #2a5298;
+                    color: white;
+                }
+
+                .sidebar .nav-link.active {
+                    background: #1e3c72;
+                    color: white;
+                    font-weight: 600;
+                }
+
+        .content-area {
+            margin-left: 260px;
+            padding: 2rem;
+            min-height: calc(100vh - 56px);
+            background-color: #f8f9fa;
+        }
+
+        footer {
+            border-top: 1px solid #dee2e6;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            footer a {
+                color: #1e3c72;
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@Url.Action("BalanceDashboard", "Transaction")">BankingApplication</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav"
+                    aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="topNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Home")">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Privacy", "Home")">Privacy</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <h6>Management</h6>
+        <nav class="nav flex-column mb-3">
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Corporate" ? "active" : "")" asp-controller="Corporate" asp-action="Index">
+                <i class="bi bi-building"></i> Corporate Management
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Branch" ? "active" : "")" asp-controller="Branch" asp-action="Index">
+                <i class="bi bi-diagram-3"></i> Branch Management
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Customer" ? "active" : "")" asp-controller="Customer" asp-action="Index">
+                <i class="bi bi-person-badge"></i> Customer Management
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Account" ? "active" : "")" asp-controller="Account" asp-action="Index">
+                <i class="bi bi-credit-card"></i> Account Management
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Kyc" ? "active" : "")" asp-controller="Kyc" asp-action="Index">
+                <i class="bi bi-shield-check"></i> KYC Verification
+            </a>
+        </nav>
+
+        <h6>Transactions</h6>
+        <nav class="nav flex-column">
+            <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Deposit" ? "active" : "")" asp-controller="Transaction" asp-action="Deposit">
+                <i class="bi bi-arrow-down-circle"></i> Deposit
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Withdraw" ? "active" : "")" asp-controller="Transaction" asp-action="Withdraw">
+                <i class="bi bi-arrow-up-circle"></i> Withdraw
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "History" ? "active" : "")" asp-controller="Transaction" asp-action="History">
+                <i class="bi bi-clock-history"></i> Transaction History
+            </a>
+            @* <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "BalanceDashboard" ? "active" : "")" asp-controller="Transaction" asp-action="BalanceDashboard">
+                <i class="bi bi-bar-chart-line"></i> Balance Dashboard
+            </a> *@
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="content-area">
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+
+        <footer>
+            <small>© 2025 - BankingApplication</small>
+            <small><a href="@Url.Action("Privacy", "Home")">Privacy</a></small>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
